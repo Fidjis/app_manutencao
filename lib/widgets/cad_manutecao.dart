@@ -7,15 +7,31 @@ import 'package:get/get.dart';
 import 'my_text_form_field.widget.dart';
 
 class CadManutencao extends GetView<HomePageController> {
-  CadManutencao() {
+  CadManutencao({Manutencao manutencao}) {
     Get.lazyPut(() => HomePageController());
+
+    if (manutencao != null) {
+      isEditMode = true;
+      this.manutencao = manutencao;
+      textEditingController1 = TextEditingController(text: manutencao.epis);
+      textEditingController2 = TextEditingController(text: manutencao.atividades);
+      textEditingController3 = TextEditingController(text: manutencao.localizacao);
+      textEditingController4 = TextEditingController(text: manutencao.frequencia);
+    } else {
+      isEditMode = false;
+      textEditingController1 = TextEditingController();
+      textEditingController2 = TextEditingController();
+      textEditingController3 = TextEditingController();
+      textEditingController4 = TextEditingController();
+    }
   }
 
-  final Manutencao manutencao = Manutencao();
-  final TextEditingController textEditingController1 = TextEditingController();
-  final TextEditingController textEditingController2 = TextEditingController();
-  final TextEditingController textEditingController3 = TextEditingController();
-  final TextEditingController textEditingController4 = TextEditingController();
+  bool isEditMode;
+  Manutencao manutencao = Manutencao();
+  TextEditingController textEditingController1 = TextEditingController();
+  TextEditingController textEditingController2 = TextEditingController();
+  TextEditingController textEditingController3 = TextEditingController();
+  TextEditingController textEditingController4 = TextEditingController();
 
   List<DropdownMenuItem<Inspecao>> buildDropdownMenuItems(List insps) {
     List<DropdownMenuItem<Inspecao>> items = [];
@@ -122,8 +138,8 @@ class CadManutencao extends GetView<HomePageController> {
                             controller.hintDrop.value = 'Selecione';
                             Navigator.of(context).pop();
                           },
-                          child: const Text(
-                            'CANCELAR',
+                          child: Text(
+                            isEditMode ? '' : 'CANCELAR',
                             style: TextStyle(color: Colors.red),
                           ),
                         ),
@@ -137,17 +153,19 @@ class CadManutencao extends GetView<HomePageController> {
                         ),
                         child: TextButton(
                           onPressed: () {
-                            manutencao.epis = textEditingController1.text;
-                            manutencao.atividades = textEditingController2.text;
-                            manutencao.localizacao = textEditingController3.text;
-                            manutencao.frequencia = textEditingController4.text;
-                            manutencao.inspecao = _selectedInspecao;
-                            controller.addManutencao(manutencao.toJson());
-                            controller.hintDrop.value = 'Selecione';
+                            if (!isEditMode) {
+                              manutencao.epis = textEditingController1.text;
+                              manutencao.atividades = textEditingController2.text;
+                              manutencao.localizacao = textEditingController3.text;
+                              manutencao.frequencia = textEditingController4.text;
+                              manutencao.inspecao = _selectedInspecao;
+                              controller.addManutencao(manutencao.toJson());
+                              controller.hintDrop.value = 'Selecione';
+                            }
                             Navigator.of(context).pop();
                           },
-                          child: const Text(
-                            'CADASTRAR',
+                          child: Text(
+                            isEditMode ? 'Fechar' : 'CADASTRAR',
                           ),
                         ),
                       ),

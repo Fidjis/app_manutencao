@@ -20,7 +20,7 @@ class Empresa {
   String toJson() {
     return """
       {
-        "id": "$id",
+        "id": $id,
         "nome": "$nome",
         "cnpj": "$cnpj",
         "contato": "$contato"

@@ -7,15 +7,32 @@ import 'package:get/get.dart';
 import 'my_text_form_field.widget.dart';
 
 class CadInspecao extends GetView<HomePageController> {
-  CadInspecao() {
+  CadInspecao({Inspecao inspecao}) {
     Get.lazyPut(() => HomePageController());
+
+    if (inspecao != null) {
+      isEditMode = true;
+      this.inspecao = inspecao;
+      textEditingController1 = TextEditingController(text: inspecao.epis);
+      textEditingController2 = TextEditingController(text: inspecao.elementos);
+      textEditingController3 = TextEditingController(text: inspecao.tipo);
+      textEditingController4 = TextEditingController(text: inspecao.frequencia);
+    } else {
+      isEditMode = false;
+      textEditingController1 = TextEditingController();
+      textEditingController2 = TextEditingController();
+      textEditingController3 = TextEditingController();
+      textEditingController4 = TextEditingController();
+    }
   }
 
-  final Inspecao inspecao = Inspecao();
-  final TextEditingController textEditingController1 = TextEditingController();
-  final TextEditingController textEditingController2 = TextEditingController();
-  final TextEditingController textEditingController3 = TextEditingController();
-  final TextEditingController textEditingController4 = TextEditingController();
+  bool isEditMode;
+
+  Inspecao inspecao = Inspecao();
+  TextEditingController textEditingController1;
+  TextEditingController textEditingController2;
+  TextEditingController textEditingController3;
+  TextEditingController textEditingController4;
 
   List<DropdownMenuItem<Equipamento>> buildDropdownMenuItems(List equips) {
     List<DropdownMenuItem<Equipamento>> items = [];
@@ -122,8 +139,8 @@ class CadInspecao extends GetView<HomePageController> {
                             controller.hintDrop.value = 'Selecione';
                             Navigator.of(context).pop();
                           },
-                          child: const Text(
-                            'CANCELAR',
+                          child: Text(
+                            isEditMode ? '' : 'CANCELAR',
                             style: TextStyle(color: Colors.red),
                           ),
                         ),
@@ -137,17 +154,21 @@ class CadInspecao extends GetView<HomePageController> {
                         ),
                         child: TextButton(
                           onPressed: () {
-                            inspecao.epis = textEditingController1.text;
-                            inspecao.elementos = textEditingController2.text;
-                            inspecao.tipo = textEditingController3.text;
-                            inspecao.frequencia = textEditingController4.text;
-                            inspecao.equipamento = _selectedEquipamento;
-                            controller.addInspecao(inspecao.toJson());
-                            controller.hintDrop.value = 'Selecione';
+                            if (isEditMode) {
+                              //controller.edtEmpresa(empresa.toJson(), empresa.id);
+                            } else {
+                              inspecao.epis = textEditingController1.text;
+                              inspecao.elementos = textEditingController2.text;
+                              inspecao.tipo = textEditingController3.text;
+                              inspecao.frequencia = textEditingController4.text;
+                              inspecao.equipamento = _selectedEquipamento;
+                              controller.addInspecao(inspecao.toJson());
+                              controller.hintDrop.value = 'Selecione';
+                            }
                             Navigator.of(context).pop();
                           },
-                          child: const Text(
-                            'CADASTRAR',
+                          child: Text(
+                            isEditMode ? 'FECHAR' : 'CADASTRAR',
                           ),
                         ),
                       ),

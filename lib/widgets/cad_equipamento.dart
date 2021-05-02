@@ -7,13 +7,24 @@ import 'package:get/get.dart';
 import 'my_text_form_field.widget.dart';
 
 class CadEquipamentoModal extends GetView<HomePageController> {
-  CadEquipamentoModal() {
+  CadEquipamentoModal({Equipamento equipamento}) {
     Get.lazyPut(() => HomePageController());
+
+    if (equipamento != null) {
+      isEditMode = true;
+      this.equipamento = equipamento;
+      textEditingController1 = TextEditingController(text: equipamento.nome);
+    } else {
+      isEditMode = false;
+      textEditingController1 = TextEditingController();
+    }
   }
 
-  final Equipamento equipamento = Equipamento();
-  final TextEditingController textEditingController1 = TextEditingController();
-  final TextEditingController textEditingController2 = TextEditingController();
+  bool isEditMode;
+  Equipamento equipamento = Equipamento();
+  TextEditingController textEditingController1;
+  TextEditingController textEditingController2;
+  TextEditingController textEditingController3;
 
   List<DropdownMenuItem<Empresa>> buildDropdownMenuItems(List companies) {
     List<DropdownMenuItem<Empresa>> items = [];
@@ -98,8 +109,8 @@ class CadEquipamentoModal extends GetView<HomePageController> {
                           controller.hintDrop.value = 'Selecione uma empresa';
                           Navigator.of(context).pop();
                         },
-                        child: const Text(
-                          'CANCELAR',
+                        child: Text(
+                          isEditMode ? '' : 'CANCELAR',
                           style: TextStyle(color: Colors.red),
                         ),
                       ),
@@ -113,14 +124,17 @@ class CadEquipamentoModal extends GetView<HomePageController> {
                       ),
                       child: TextButton(
                         onPressed: () {
-                          equipamento.nome = textEditingController1.text;
-                          equipamento.empresa = _selectedCompany;
-                          controller.addEquipamento(equipamento.toJson());
-                          controller.hintDrop.value = 'Selecione uma empresa';
+                          if (!isEditMode) {
+                            equipamento.nome = textEditingController1.text;
+                            equipamento.empresa = _selectedCompany;
+                            controller.addEquipamento(equipamento.toJson());
+                            controller.hintDrop.value = 'Selecione';
+                          }
+
                           Navigator.of(context).pop();
                         },
-                        child: const Text(
-                          'CADASTRAR',
+                        child: Text(
+                          isEditMode ? 'FECHAR' : 'CADASTRAR',
                         ),
                       ),
                     ),

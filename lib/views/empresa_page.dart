@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class EmpresaPage extends GetView<HomePageController> {
-
-  EmpresaPage(){
+  EmpresaPage() {
     Get.lazyPut(() => HomePageController());
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,21 +15,24 @@ class EmpresaPage extends GetView<HomePageController> {
         title: Text('Empresas'),
         actions: [
           IconButton(
-            icon: Icon(Icons.refresh), 
-            onPressed: (){
-              controller.getEmpresas();
-            }
-          )
+              icon: Icon(Icons.refresh),
+              onPressed: () {
+                controller.getEmpresas();
+              })
         ],
       ),
       body: Scrollbar(
-        child: Obx(() => controller.isGetEmpresasLoading.value ? Center(child: CircularProgressIndicator()) : ListView.builder(
-          padding: const EdgeInsets.all(8),
-          itemCount: controller.empresas.length,
-          itemBuilder: (BuildContext context, int index) {
-            return CardEmpresaWidget(controller: controller, empresa: controller.empresas[index]);
-          },
-        ),),
+        child: Obx(
+          () => controller.isGetEmpresasLoading.value
+              ? Center(child: CircularProgressIndicator())
+              : ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: controller.empresas.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return CardEmpresaWidget(controller: controller, empresa: controller.empresas[index]);
+                  },
+                ),
+        ),
       ),
     );
   }

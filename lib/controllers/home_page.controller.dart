@@ -9,6 +9,9 @@ import 'package:get/get.dart';
 
 class HomePageController extends GetxController {
   final hintDrop = 'Selecione'.obs;
+  final hintDropInspecao = 'Filtrar'.obs;
+  final hintDropEquip = 'Filtrar'.obs;
+  final hintDropManut = 'Filtrar'.obs;
 
   final _service = new DataServices();
   final currentTab = 0.obs;
@@ -32,9 +35,45 @@ class HomePageController extends GetxController {
     getInspecao();
   }
 
+  void showDialog(BuildContext context, Widget widget) {
+    showGeneralDialog(
+      context: context,
+      pageBuilder: (_, __, ___) {
+        return widget;
+      },
+    );
+  }
+
+  filtrarEquipamentos(String empresaNome) async {
+    var aux = equipamentos;
+    aux.forEach((element) {
+      if (element.empresa.nome != empresaNome) {
+        equipamentos.remove(element);
+      }
+    });
+  }
+
+  filtrarInspecao(String equipNome) async {
+    var aux = inspecao;
+    aux.forEach((element) {
+      if (element.equipamento.nome != equipNome) {
+        inspecao.remove(element);
+      }
+    });
+  }
+
+  filtrarManutencao(String inspNome) async {
+    var aux = manutencao;
+    aux.forEach((element) {
+      if (element.inspecao.tipo != inspNome) {
+        manutencao.remove(element);
+      }
+    });
+  }
+
   getEmpresas() async {
     isGetEmpresasLoading.value = true;
-    _service.makeGetRequest(_service.getEmpresa).then((data) {
+    await _service.makeGetRequest(_service.getEmpresa).then((data) {
       empresas.value = List<Empresa>.from(data.map((model) => Empresa.fromJson(model)));
       isGetEmpresasLoading.value = false;
     });
@@ -42,7 +81,7 @@ class HomePageController extends GetxController {
 
   getManutencao() async {
     isGetManutencaoLoading.value = true;
-    _service.makeGetRequest(_service.getManutencao).then((data) {
+    await _service.makeGetRequest(_service.getManutencao).then((data) {
       manutencao.value = List<Manutencao>.from(data.map((model) => Manutencao.fromJson(model)));
       isGetManutencaoLoading.value = false;
     });
@@ -50,7 +89,7 @@ class HomePageController extends GetxController {
 
   getEquipamentos() async {
     isGetEquipamentosLoading.value = true;
-    _service.makeGetRequest(_service.getEquipamento).then((data) {
+    await _service.makeGetRequest(_service.getEquipamento).then((data) {
       equipamentos.value = List<Equipamento>.from(data.map((model) => Equipamento.fromJson(model)));
       isGetEquipamentosLoading.value = false;
     });
@@ -58,7 +97,7 @@ class HomePageController extends GetxController {
 
   getInspecao() async {
     isGetInspecaoLoading.value = true;
-    _service.makeGetRequest(_service.getInspecao).then((data) {
+    await _service.makeGetRequest(_service.getInspecao).then((data) {
       inspecao.value = List<Inspecao>.from(data.map((model) => Inspecao.fromJson(model)));
       isGetInspecaoLoading.value = false;
     });
@@ -80,6 +119,14 @@ class HomePageController extends GetxController {
   addInspecao(String json) {
     print(json);
     _service.makePostRequest(_service.postInspecao, json).then((_) => getInspecao());
+  }
+
+  edtEmpresa(String json, int id) {
+    _service.makePutRequest(_service.putEmpresa, id, json).then((_) => getEmpresas());
+  }
+
+  edtEquipamento(String json, int id) {
+    _service.makePutRequest(_service.putEquipamento, id, json).then((_) => getEquipamentos());
   }
 
   deleteEmpresa(int id) {

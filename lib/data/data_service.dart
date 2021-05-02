@@ -46,13 +46,16 @@ class DataServices {
     print(body);
   }
 
-  makePutRequest(String principalurl, int id) async {
+  makePutRequest(String principalurl, int id, String json) async {
     String url = principalurl.replaceFirst('{id}', id.toString());
     Map<String, String> headers = {"Content-type": "application/json"};
-    String json = '{"title": "Hello", "body": "body text", "userId": 1}';
     var response = await http.put(Uri.parse(url), headers: headers, body: json);
     String body = response.body;
-    print(body);
+    print('Response: ' + body);
+    print('Id: ' + id.toString());
+    print('URL: ' + url);
+    print('JSON: ' + json);
+    print('Status: ' + response.statusCode.toString());
   }
 
   makeDeleteRequest(String principalurl, int id) async {

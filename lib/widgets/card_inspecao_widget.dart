@@ -1,5 +1,6 @@
 import 'package:app_manutencao/controllers/home_page.controller.dart';
 import 'package:app_manutencao/models/inspecao_model.dart';
+import 'package:app_manutencao/widgets/cad_inspecao.dart';
 import 'package:flutter/material.dart';
 
 class CardInspecaoWidget extends StatelessWidget {
@@ -16,6 +17,14 @@ class CardInspecaoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
+        onTap: () {
+          controller.showDialog(
+            context,
+            CadInspecao(
+              inspecao: inspecao,
+            ),
+          );
+        },
         title: new Text(
           '${inspecao.tipo}',
           style: TextStyle(fontSize: 18.0),
@@ -36,7 +45,6 @@ class CardInspecaoWidget extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(icon: Icon(Icons.edit), onPressed: () {}),
             IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () {
@@ -44,7 +52,6 @@ class CardInspecaoWidget extends StatelessWidget {
                 }),
           ],
         ),
-        onTap: () {},
       ),
     );
   }

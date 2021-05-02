@@ -1,5 +1,6 @@
 import 'package:app_manutencao/controllers/home_page.controller.dart';
 import 'package:app_manutencao/models/equipamento_model.dart';
+import 'package:app_manutencao/widgets/cad_equipamento.dart';
 import 'package:flutter/material.dart';
 
 class CardEquipamentoWidget extends StatelessWidget {
@@ -36,7 +37,6 @@ class CardEquipamentoWidget extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(icon: Icon(Icons.edit), onPressed: () {}),
             IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () {
@@ -44,7 +44,14 @@ class CardEquipamentoWidget extends StatelessWidget {
                 }),
           ],
         ),
-        onTap: () {},
+        onTap: () {
+          controller.showDialog(
+            context,
+            CadEquipamentoModal(
+              equipamento: equipamento,
+            ),
+          );
+        },
       ),
     );
   }

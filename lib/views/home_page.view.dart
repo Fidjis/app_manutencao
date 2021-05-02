@@ -22,16 +22,8 @@ class Home extends GetView<HomePageController> {
     InspecaoPage(),
     EquipePage(),
   ];
-  final PageStorageBucket bucket = PageStorageBucket();
 
-  void _showDialog(BuildContext context, Widget widget) {
-    showGeneralDialog(
-      context: context,
-      pageBuilder: (_, __, ___) {
-        return widget;
-      },
-    );
-  }
+  final PageStorageBucket bucket = PageStorageBucket();
 
   @override
   Widget build(BuildContext context) {
@@ -45,16 +37,16 @@ class Home extends GetView<HomePageController> {
             onPressed: () {
               switch (controller.currentTab.value) {
                 case 0:
-                  _showDialog(context, CadEmpresaModal());
+                  controller.showDialog(context, CadEmpresaModal());
                   break;
                 case 1:
-                  _showDialog(context, CadManutencao());
+                  controller.showDialog(context, CadManutencao());
                   break;
                 case 2:
-                  _showDialog(context, CadInspecao());
+                  controller.showDialog(context, CadInspecao());
                   break;
                 case 3:
-                  _showDialog(context, CadEquipamentoModal());
+                  controller.showDialog(context, CadEquipamentoModal());
                   break;
                 default:
               }

@@ -1,5 +1,6 @@
 import 'package:app_manutencao/controllers/home_page.controller.dart';
 import 'package:app_manutencao/models/manutencao_model.dart';
+import 'package:app_manutencao/widgets/cad_manutecao.dart';
 import 'package:flutter/material.dart';
 
 class CardManutencaoWidget extends StatelessWidget {
@@ -16,7 +17,15 @@ class CardManutencaoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        title: new Text(
+        onTap: () {
+          controller.showDialog(
+            context,
+            CadManutencao(
+              manutencao: manutencao,
+            ),
+          );
+        },
+        title: Text(
           manutencao.atividades,
           style: TextStyle(fontSize: 18.0),
         ),
@@ -36,7 +45,6 @@ class CardManutencaoWidget extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(icon: Icon(Icons.edit), onPressed: () {}),
             IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () {
@@ -44,7 +52,6 @@ class CardManutencaoWidget extends StatelessWidget {
                 }),
           ],
         ),
-        onTap: () {},
       ),
     );
   }

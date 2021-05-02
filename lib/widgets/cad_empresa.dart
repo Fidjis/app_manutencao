@@ -6,15 +6,28 @@ import 'package:get/get.dart';
 import 'my_text_form_field.widget.dart';
 
 class CadEmpresaModal extends GetView<HomePageController> {
-
-  CadEmpresaModal(){
+  CadEmpresaModal({Empresa empresa}) {
     Get.lazyPut(() => HomePageController());
+
+    if (empresa != null) {
+      isEditMode = true;
+      this.empresa = empresa;
+      textEditingController1 = TextEditingController(text: empresa.nome);
+      textEditingController2 = TextEditingController(text: empresa.cnpj);
+      textEditingController3 = TextEditingController(text: empresa.contato);
+    } else {
+      isEditMode = false;
+      textEditingController1 = TextEditingController();
+      textEditingController2 = TextEditingController();
+      textEditingController3 = TextEditingController();
+    }
   }
 
-  final Empresa empresa = Empresa();
-  final TextEditingController textEditingController1 = TextEditingController();
-  final TextEditingController textEditingController2 = TextEditingController();
-  final TextEditingController textEditingController3 = TextEditingController();
+  bool isEditMode;
+  Empresa empresa = Empresa();
+  TextEditingController textEditingController1;
+  TextEditingController textEditingController2;
+  TextEditingController textEditingController3;
 
   @override
   Widget build(BuildContext context) {
@@ -30,22 +43,40 @@ class CadEmpresaModal extends GetView<HomePageController> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Flexible(
-                  child: Form(
+                    child: Form(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Spacing.small(),
-                      Center(child: const Text('Cadastrar Empresa', style: TextStyle(fontSize: 21),)),
-                      SizedBox(height: 25.0,),
-                      MyTextFormField(labelText: 'Nome:', textEditingController: textEditingController1,),
-                      SizedBox(height: 10.0,),
-                      MyTextFormField(labelText: 'CNPJ:', textEditingController: textEditingController2,),
-                      SizedBox(height: 10.0,),
-                      MyTextFormField(labelText: 'Contato:', textEditingController: textEditingController3,),
+                      Center(
+                          child: const Text(
+                        'Cadastrar Empresa',
+                        style: TextStyle(fontSize: 21),
+                      )),
+                      SizedBox(
+                        height: 25.0,
+                      ),
+                      MyTextFormField(
+                        labelText: 'Nome:',
+                        textEditingController: textEditingController1,
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      MyTextFormField(
+                        labelText: 'CNPJ:',
+                        textEditingController: textEditingController2,
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      MyTextFormField(
+                        labelText: 'Contato:',
+                        textEditingController: textEditingController3,
+                      ),
                     ],
                   ),
-                )
-                ),
+                )),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   mainAxisSize: MainAxisSize.max,
@@ -59,7 +90,10 @@ class CadEmpresaModal extends GetView<HomePageController> {
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: const Text('CANCELAR', style: TextStyle(color: Colors.red),),
+                        child: Text(
+                          isEditMode ? '' : 'CANCELAR',
+                          style: TextStyle(color: Colors.red),
+                        ),
                       ),
                     ),
                     // Spacing.normal(),
@@ -74,10 +108,15 @@ class CadEmpresaModal extends GetView<HomePageController> {
                           empresa.nome = textEditingController1.text;
                           empresa.cnpj = textEditingController2.text;
                           empresa.contato = textEditingController3.text;
-                          controller.addEmpresa(empresa.toJson());
+                          if (isEditMode) {
+                            //controller.edtEmpresa(empresa.toJson(), empresa.id);
+                          } else {
+                            controller.addEmpresa(empresa.toJson());
+                          }
+                          Navigator.of(context).pop();
                         },
-                        child: const Text(
-                          'CADASTRAR',
+                        child: Text(
+                          isEditMode ? 'FECHAR' : 'CADASTRAR',
                         ),
                       ),
                     ),
